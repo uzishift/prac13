@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prac13", "prac13\prac13.csproj", "{23C03CA7-12B4-4402-9285-34642415045C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libmas", "libmas\libmas.csproj", "{322B1041-770E-41B3-8569-9940025E3F62}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23C03CA7-12B4-4402-9285-34642415045C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23C03CA7-12B4-4402-9285-34642415045C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23C03CA7-12B4-4402-9285-34642415045C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23C03CA7-12B4-4402-9285-34642415045C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{322B1041-770E-41B3-8569-9940025E3F62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{322B1041-770E-41B3-8569-9940025E3F62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{322B1041-770E-41B3-8569-9940025E3F62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{322B1041-770E-41B3-8569-9940025E3F62}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F3E36CBF-DC9B-4C84-A2BB-B8E5EE4AFCF4}
+	EndGlobalSection
+EndGlobal
