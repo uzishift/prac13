@@ -9,7 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Безымянный-no-bg-preview %28carve.photos%29 %281%29.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\libmas\libmas.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Безымянный-no-bg-preview (carve.photos) (1).png" />
   </ItemGroup>
 
 </Project>

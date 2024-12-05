@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Data;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -123,6 +124,44 @@ namespace prac13
             else
             {
                 MessageBox.Show("Введите значение в таблицу", "Ошибка");
+            }
+        }
+
+        private void dgInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Обновляем размер таблицы
+            int rowCount = InputDataGrid.Items.Count;
+            int columnCount = (array != null) ? array.GetLength(1) : 0; // Получаем количество столбцов из массива
+
+            // Обновляем текст статуса с размером таблицы
+            StatusTableSize.Text = $"Размер таблицы: {rowCount - 1}x{columnCount}";
+
+            // Проверка на выделенные ячейки
+            if (InputDataGrid.SelectedCells.Count > 0)
+            {
+                var selectedCellInfo = InputDataGrid.SelectedCells[0]; // Получаем информацию о первой выделенной ячейке
+                int rowIndex = InputDataGrid.Items.IndexOf(selectedCellInfo.Item);
+
+                // Получаем индекс выделенной колонки через цикл
+                int columnIndex = -1;
+                for (int i = 0; i < InputDataGrid.Columns.Count; i++)
+                {
+                    if (InputDataGrid.Columns[i] == selectedCellInfo.Column)
+                    {
+                        columnIndex = i;
+                        break;
+                    }
+                }
+
+                // Проверяем, если нашли индекс столбца, и обновляем информацию о выделенной ячейке
+                if (columnIndex >= 0)
+                {
+                    StatusSelectedCell.Text = $"Выделенная ячейка: ({rowIndex + 1}, {columnIndex})"; // +1 для удобства
+                }
+            }
+            else
+            {
+                StatusSelectedCell.Text = "Выделенная ячейка: None"; // Если ничего не выделено
             }
         }
     }

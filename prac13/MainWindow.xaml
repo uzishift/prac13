@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:prac13"
         mc:Ignorable="d"
-        Title="Матрица" Height="600" Width="800">
+        Title="Матрица" Height="600" Width="800" Icon="/Безымянный-no-bg-preview (carve.photos) (1).png">
     <Grid>
         <Menu VerticalAlignment="Top">
             <MenuItem Header="Файл">
@@ -24,29 +24,33 @@
 
             <GroupBox Header="Исходные данные" Grid.Column="0" Margin="5" Padding="10" Background="#E8F0FE">
                 <StackPanel>
-                    <TextBlock Text="Введите количество строк:" Margin="0,0,0,5"/>
+                    <TextBlock Text="Введите количество строк:" Margin="0,0,0,5" TextWrapping="Wrap"/>
                     <TextBox x:Name="tbRows" Width="100" Margin="0,0,0,5"/>
 
-                    <TextBlock Text="Введите количество столбцов:" Margin="0,0,0,5"/>
+                    <TextBlock Text="Введите количество столбцов:" Margin="0,0,0,5" TextWrapping="Wrap"/>
                     <TextBox x:Name="tbCols" Width="100" Margin="0,0,0,10"/>
 
                     <Button Content="Заполнить" Click="btnFill_Click" 
                             Height="30" Background="#1E88E5" Foreground="White"/>
 
-                    <DataGrid x:Name="InputDataGrid" AutoGenerateColumns="True" CanUserResizeRows="True" 
+                    <DataGrid x:Name="InputDataGrid" SelectionChanged="dgInput_SelectionChanged"  AutoGenerateColumns="True" CanUserResizeRows="True" 
                               Margin="5,10,5,0" Height="300"/>
                 </StackPanel>
             </GroupBox>
 
             <GroupBox Header="Результаты" Grid.Column="1" Margin="5" Padding="10" Background="#E8F0FE">
                 <StackPanel>
-                    <TextBlock Text="Введите номер столбца K:" Margin="0,0,0,10"/>
+                    <TextBlock Text="Введите номер столбца K:" Margin="0,0,0,10" TextWrapping="Wrap"/>
                     <TextBox x:Name="tbK" Margin="0,0,0,10" Width="80" />
                     <Button Content="Вычислить" Click="btnFind_Click" 
                             Margin="0,0,0,10" Height="30" Background="#1E88E5" Foreground="White"/>
-                    <TextBlock x:Name="tbRez" FontSize="16" FontWeight="Bold" Margin="5"/>
+                    <TextBlock x:Name="tbRez" FontSize="16" FontWeight="Bold" Margin="5" TextWrapping="Wrap"/>
                 </StackPanel>
             </GroupBox>
         </Grid>
+        <StatusBar VerticalAlignment="Bottom">
+            <TextBlock x:Name="StatusTableSize" Text="Размер таблицы: 0x0" Margin="5"/>
+            <TextBlock x:Name="StatusSelectedCell" Text="Выделенная ячейка: None" Margin="5"/>
+        </StatusBar>
     </Grid>
 </Window>
