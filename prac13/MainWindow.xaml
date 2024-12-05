@@ -11,7 +11,12 @@
             <MenuItem Header="Файл">
                 <MenuItem Header="Загрузить" Click="btnOpen_Click"/>
                 <MenuItem Header="Сохранить" Click="btnSave_Click"/>
+                <Separator></Separator>
                 <MenuItem Header="Выход" Click="btnClose_Click"/>
+            </MenuItem>
+            <MenuItem Header="Действия">
+                <MenuItem Header="Заполнить" Click="btnFill_Click"/>
+                <MenuItem Header="Вычислить" Click="btnFind_Click"/>
             </MenuItem>
             <MenuItem Header="Справка" Click="btnInfo_Click"/>
         </Menu>
@@ -19,10 +24,15 @@
         <Grid Margin="0,30,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="auto" MinWidth="300"/>
             </Grid.ColumnDefinitions>
 
             <GroupBox Header="Исходные данные" Grid.Column="0" Margin="5" Padding="10" Background="#E8F0FE">
+                <GroupBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Очистить" Click="cmDataGrid_Click"/>
+                    </ContextMenu>
+                </GroupBox.ContextMenu>
                 <StackPanel>
                     <TextBlock Text="Введите количество строк:" Margin="0,0,0,5" TextWrapping="Wrap"/>
                     <TextBox x:Name="tbRows" Width="100" Margin="0,0,0,5"/>
@@ -31,7 +41,7 @@
                     <TextBox x:Name="tbCols" Width="100" Margin="0,0,0,10"/>
 
                     <Button Content="Заполнить" Click="btnFill_Click" 
-                            Height="30" Background="#1E88E5" Foreground="White"/>
+                            Height="30" Background="#1E88E5" Foreground="White" ToolTip="Заполнить таблицу"/>
 
                     <DataGrid x:Name="InputDataGrid" SelectionChanged="dgInput_SelectionChanged"  AutoGenerateColumns="True" CanUserResizeRows="True" 
                               Margin="5,10,5,0" Height="300"/>
@@ -39,18 +49,26 @@
             </GroupBox>
 
             <GroupBox Header="Результаты" Grid.Column="1" Margin="5" Padding="10" Background="#E8F0FE">
+                <GroupBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Очистить" Click="cmKClear_Click"/>
+                    </ContextMenu>
+                </GroupBox.ContextMenu>
                 <StackPanel>
                     <TextBlock Text="Введите номер столбца K:" Margin="0,0,0,10" TextWrapping="Wrap"/>
                     <TextBox x:Name="tbK" Margin="0,0,0,10" Width="80" />
                     <Button Content="Вычислить" Click="btnFind_Click" 
-                            Margin="0,0,0,10" Height="30" Background="#1E88E5" Foreground="White"/>
+                            Margin="0,0,0,10" Height="30" Background="#1E88E5" ToolTip="Найти сумму и произведение столбца K" Foreground="White"/>
                     <TextBlock x:Name="tbRez" FontSize="16" FontWeight="Bold" Margin="5" TextWrapping="Wrap"/>
                 </StackPanel>
             </GroupBox>
         </Grid>
         <StatusBar VerticalAlignment="Bottom">
             <TextBlock x:Name="StatusTableSize" Text="Размер таблицы: 0x0" Margin="5"/>
-            <TextBlock x:Name="StatusSelectedCell" Text="Выделенная ячейка: None" Margin="5"/>
+            <Separator/>
+            <TextBlock x:Name="tbTime" Text="Загрузка..."/>
+            <Separator/>
+            <TextBlock x:Name="tbData" Text="Загрузка..."/>
         </StatusBar>
     </Grid>
 </Window>

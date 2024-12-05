@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using libmas;
 
 namespace prac13
@@ -21,26 +22,37 @@ namespace prac13
         bool flagCellEditEnding = false;
         bool flagDoneCellEditEnding = false;
         int[,] array;
+        DispatcherTimer timer;
 
         public MainWindow()
         {
             InitializeComponent();
+            InitializeTimer();
         }
+        /// <summary>
+        /// Кнопка вывода информации
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnInfo_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Практическая работа №3. Вариант 12\nДана матрица размера M × N.\nНайти минимальный среди максимальных элементов ее столбцов.", "О программе");
+            MessageBox.Show("Практическая работа №13. Вариант 12\nДана матрица размера M * N и целое число K (1 < K < N).\nНайти сумму и произведение элементов K-го столбца данной матрицы.", "О программе");
         }
 
-        private void btnDev_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Демьяхин Роман ИСП-31", "Разработчик");
-        }
-
+        /// <summary>
+        /// Кнопка закрытия
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-
+        /// <summary>
+        /// Изменение DataGrid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             flagCellEditEnding = true;
@@ -57,18 +69,30 @@ namespace prac13
                 e.Cancel = true;
             }
         }
-
+        /// <summary>
+        /// Кнопка открытия таблицы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
             array = ArrayEditor.Open();
             InputDataGrid.ItemsSource = VisualArray.ToDataTable(array).DefaultView;
         }
-
+        /// <summary>
+        /// Кнопка сохранения таблицы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             ArrayEditor.Save(array);
         }
-
+        /// <summary>
+        /// Кнопка заполнения таблицы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnFill_Click(object sender, RoutedEventArgs e)
         {
             if (int.TryParse(tbRows.Text, out int numberRow) && int.TryParse(tbCols.Text, out int numberColumn))
@@ -90,79 +114,121 @@ namespace prac13
                 MessageBox.Show("Введите корректные значения для строк и столбцов.", "Ошибка");
             }
         }
-
+        /// <summary>
+        /// Кнопка очистки DataGrid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             InputDataGrid.ItemsSource = null;
-            array = null; // сброс массива
+            array = null;
         }
-
+        /// <summary>
+        /// Кнопка нахождения суммы и произведения
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnFind_Click(object sender, RoutedEventArgs e)
         {
-            if (array != null && flagCellEditEnding == flagDoneCellEditEnding)
+            try
             {
-                // Получаем номер столбца K
-                if (int.TryParse(tbK.Text, out int k) && k > 0 && k <= array.GetLength(1))
+                if (array != null && flagCellEditEnding == flagDoneCellEditEnding)
                 {
-                    int sum = 0;
-                    int product = 1;
-
-                    for (int i = 0; i < array.GetLength(0); i++)
+                    if (int.TryParse(tbK.Text, out int k))
                     {
-                        sum += array[i, k - 1]; // Индексация начинается с 0
-                        product *= array[i, k - 1];
+                        string result = CalculateSumAndProduct(array, k);
+                        tbRez.Text = result;
                     }
-
-                    // Выводим результаты
-                    tbRez.Text = $"Сумма: {sum}, Произведение: {product}";
+                    else
+                    {
+                        MessageBox.Show("Введите корректный номер столбца (K).", "Ошибка");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Введите корректный номер столбца (K).", "Ошибка");
+                    MessageBox.Show("Введите значение в таблицу", "Ошибка");
                 }
             }
-            else
+            catch (ArgumentException ex)
             {
-                MessageBox.Show("Введите значение в таблицу", "Ошибка");
+                MessageBox.Show(ex.Message, "Ошибка");
             }
         }
+        /// <summary>
+        /// Функция нахождения суммы и произведения
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="columnNumber"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        private string CalculateSumAndProduct(int[,] array, int columnNumber)
+        {
+            if (array == null || columnNumber <= 0 || columnNumber > array.GetLength(1))
+            {
+                throw new ArgumentException("Некорректный номер столбца или массив не инициализирован.");
+            }
 
+            int sum = 0;
+            int product = 1;
+
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                sum += array[i, columnNumber - 1];
+                product *= array[i, columnNumber - 1];
+            }
+
+            return $"Сумма: {sum}, Произведение: {product}";
+        }
+        /// <summary>
+        /// Отслеживание размера таблицы и отображение ее размеров
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dgInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Обновляем размер таблицы
             int rowCount = InputDataGrid.Items.Count;
-            int columnCount = (array != null) ? array.GetLength(1) : 0; // Получаем количество столбцов из массива
+            int columnCount = (array != null) ? array.GetLength(1) : 0;
 
-            // Обновляем текст статуса с размером таблицы
             StatusTableSize.Text = $"Размер таблицы: {rowCount - 1}x{columnCount}";
-
-            // Проверка на выделенные ячейки
-            if (InputDataGrid.SelectedCells.Count > 0)
-            {
-                var selectedCellInfo = InputDataGrid.SelectedCells[0]; // Получаем информацию о первой выделенной ячейке
-                int rowIndex = InputDataGrid.Items.IndexOf(selectedCellInfo.Item);
-
-                // Получаем индекс выделенной колонки через цикл
-                int columnIndex = -1;
-                for (int i = 0; i < InputDataGrid.Columns.Count; i++)
-                {
-                    if (InputDataGrid.Columns[i] == selectedCellInfo.Column)
-                    {
-                        columnIndex = i;
-                        break;
-                    }
-                }
-
-                // Проверяем, если нашли индекс столбца, и обновляем информацию о выделенной ячейке
-                if (columnIndex >= 0)
-                {
-                    StatusSelectedCell.Text = $"Выделенная ячейка: ({rowIndex + 1}, {columnIndex})"; // +1 для удобства
-                }
-            }
-            else
-            {
-                StatusSelectedCell.Text = "Выделенная ячейка: None"; // Если ничего не выделено
-            }
+        }
+        /// <summary>
+        /// Метод таймера для обновления времени и даты
+        /// </summary>
+        private void InitializeTimer()
+        {
+            timer = new DispatcherTimer();
+            timer.Tick += Timer_Tick;
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Start();
+        }
+        /// <summary>
+        /// Обработчик события тика таймера
+        /// </summary>
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            DateTime d = DateTime.Now;
+            tbTime.Text = d.ToString("HH:mm:ss");
+            tbData.Text = d.ToString("dd.MM.yyyy");
+        }
+        /// <summary>
+        /// Кнока очистки данных для таблицы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cmDataGrid_Click(object sender, RoutedEventArgs e)
+        {
+            tbCols.Clear();
+            tbRows.Clear();
+        }
+        /// <summary>
+        /// Кнопка очистки столбца K
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cmKClear_Click(object sender, RoutedEventArgs e)
+        {
+            tbK.Clear();
         }
     }
 }
